@@ -1,10 +1,10 @@
 package com.pastebin.service.url.url;
 
+import com.pastebin.exception.NotFoundException;
 import com.pastebin.model.dto.url.Request;
 import com.pastebin.model.dto.url.Response;
 import com.pastebin.model.entity.url.Url;
 import com.pastebin.service.url.cache.HashCache;
-import com.pastebin.url.exception.NotFoundException;
 import com.pastebin.repository.url.UrlCacheRepository;
 import com.pastebin.repository.url.UrlRepository;
 import lombok.RequiredArgsConstructor;

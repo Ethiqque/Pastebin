@@ -1,7 +1,9 @@
 package com.pastebin.mapper;
 
-import com.pastebin.model.dto.UserDto;
-import com.pastebin.model.entity.User;
+import com.pastebin.model.dto.comment.CommentDto;
+import com.pastebin.model.dto.comment.CommentToCreateDto;
+import com.pastebin.model.dto.comment.CommentToUpdateDto;
+import com.pastebin.model.entity.Comment;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
@@ -9,9 +11,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CommentMapper {
 
-    UserDto toDto(User user);
+    CommentDto toDto(Comment comment);
 
-    User toEntity(UserDto userDto);
+    Comment toEntity(CommentToCreateDto commentDto);
 
-    void update(UserDto dto, @MappingTarget User user);
+    void update(CommentToUpdateDto dto, @MappingTarget Comment comment);
 }

@@ -3,7 +3,6 @@ package com.pastebin.controller;
 import com.pastebin.config.context.UserContext;
 import com.pastebin.model.dto.like.LikeDto;
 import com.pastebin.service.like.LikeService;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,29 +17,27 @@ public class LikeController {
 
     @PostMapping("/post/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public LikeDto likePost(@Positive @PathVariable long postId) {
+    public LikeDto likePost(@PathVariable long postId) {
         long userId = userContext.getUserId();
         return likeService.addLikeOnPost(userId, postId);
     }
 
     @DeleteMapping("/post/{postId}/{likeId}")
-    public void deleteLikeFromPost(@Positive @PathVariable long postId,
-                                   @Positive @PathVariable long likeId) {
+    public void deleteLikeFromPost(@PathVariable long postId) {
         long userId = userContext.getUserId();
-        likeService.removeLikeFromPost(likeId, userId, postId);
+        likeService.removeLikeFromPost(userId, postId);
     }
 
     @PostMapping("/comment/{commentId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public LikeDto likeComment(@Positive @PathVariable long commentId) {
+    public LikeDto likeComment(@PathVariable long commentId) {
         long userId = userContext.getUserId();
         return likeService.addLikeOnComment(userId, commentId);
     }
 
-    @DeleteMapping("/comment/{commentId}/{likeId}")
-    public void deleteLikeFromComment(@Positive @PathVariable long commentId,
-                                      @Positive @PathVariable long likeId) {
+    @DeleteMapping("/comment/{commentId}")
+    public void deleteLikeFromComment(@PathVariable long commentId) {
         long userId = userContext.getUserId();
-        likeService.removeLikeFromComment(likeId, userId, commentId);
+        likeService.removeLikeFromComment(userId, commentId);
     }
 }

@@ -1,6 +1,7 @@
 package com.pastebin.service.post;
 
 import com.pastebin.mapper.PostMapper;
+import com.pastebin.service.s3.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import com.pastebin.model.entity.Post;
 import com.pastebin.exception.NotFoundException;
 import com.pastebin.model.entity.PostResponse;
 import com.pastebin.repository.PostRepository;
-import com.pastebin.service.s3.AmazonS3Service;
 
 import java.util.List;
 

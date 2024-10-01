@@ -4,6 +4,7 @@ import com.pastebin.exception.NotFoundException;
 import com.pastebin.mapper.CommentMapper;
 import com.pastebin.model.dto.comment.CommentDto;
 import com.pastebin.model.dto.comment.CommentToCreateDto;
+import com.pastebin.model.dto.comment.CommentToUpdateDto;
 import com.pastebin.model.entity.Comment;
 import com.pastebin.model.entity.Post;
 import com.pastebin.repository.CommentRepository;
@@ -25,29 +26,26 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final NewCommentProducer newCommentPublisher;
 
     @Override
-    public CommentDto createComment(long postId, long userId, CommentToCreateDto commentDto) {
+    @Transactional
+    public CommentDto createComment(Long postId, Long userId, CommentToCreateDto commentDto) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(String.format("Post with id %d not found", postId)));
 
-        Post post = getById(postId);
         Comment comment = commentMapper.toEntity(commentDto);
         comment.setAuthorId(userId);
         comment.setPost(post);
 
-        comment = commentRepository.save(comment);
-        log.info("Created comment on post {} authored by {}", postId, userId);
+        commentRepository.save(comment);
+        log.info("Created comment on post {} by user {}",  postId, userId);
 
-        CommentDto dto = commentMapper.toDto(comment);
-        newCommentPublisher.publish(new NewCommentEvent(dto));
-
-        return dto;
+        return commentMapper.toDto(comment);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<CommentDto> getAllPostComments(long postId) {
-
+    public List<CommentDto> getAllPostComments(Long postId) {
         return commentRepository.findAllByPostId(postId).stream()
                 .sorted(Comparator.comparing(Comment::getCreatedAt))
                 .map(commentMapper::toDto)
@@ -55,35 +53,35 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDto updateComment(long commentId, long userId, CommentToUpdateDto updatedCommentDto) {
+    @Transactional
+    public CommentDto updateComment(Long commentId, Long userId, CommentToUpdateDto updatedCommentDto) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException(String.format("Comment with id %s not found", commentId)));
 
-        Comment commentToUpdate = commonServiceMethods.findEntityById(commentRepository, commentId, "Comment");
+        commentMapper.update(updatedCommentDto, comment);
 
-        commentValidator.validateUpdateAlbum(commentToUpdate, userId);
+        commentRepository.save(comment);
+        log.info("Updated comment {} on post {} by user {}", commentId, comment.getId(), userId);
 
-        commentMapper.update(updatedCommentDto, commentToUpdate);
-        log.info("Updated comment {} on post {} authored by {}", commentId, commentToUpdate.getPost().getId(), userId);
-        commentRepository.save(commentToUpdate);
-        return commentMapper.toDto(commentToUpdate);
+        return commentMapper.toDto(comment);
     }
 
     @Override
-    public CommentDto deleteComment(long postId, long commentId, long userId) {
-
-        Comment comment = commonServiceMethods.findEntityById(commentRepository, commentId, "Comment");
-        CommentDto commentToDelete = commentMapper.toDto(comment);
-
-        commentValidator.validateDeleteAlbum(postId, userId, comment);
+    @Transactional
+    public void deleteComment(Long commentId, Long userId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NotFoundException(String.format("Comment with id %s not found", commentId)));
 
         commentRepository.deleteById(commentId);
-        log.info("Deleted comment {} on post {} authored by {}", commentId, comment.getPost().getId(), userId);
-        return commentToDelete;
+        log.info("Deleted comment {}", commentId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public CommentDto getById(Long commentId) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(String.format("Comment with id %d not found", commentId)));
+
         return commentMapper.toDto(comment);
     }
 }

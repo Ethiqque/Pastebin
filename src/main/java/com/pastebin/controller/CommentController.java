@@ -42,11 +42,10 @@ public class CommentController {
         return commentService.updateComment(commentId, userId, commentDto);
     }
 
-    @DeleteMapping("/{commentId}/post/{postId}")
+    @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto deleteComment(@PathVariable("commentId") long commentId,
-                                    @PathVariable("postId") long postId) {
+    public void deleteComment(@PathVariable("commentId") long commentId) {
         long userId = userContext.getUserId();
-        return commentService.deleteComment(postId, commentId, userId);
+        commentService.deleteComment(commentId, userId);
     }
 }
