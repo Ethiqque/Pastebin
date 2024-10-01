@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.pastebin.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;

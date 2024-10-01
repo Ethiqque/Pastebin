@@ -1,7 +1,46 @@
+server:
+  port: 8080
 
 spring:
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5433/postgres
+    url: jdbc:postgresql://localhost:5433/pastebin_db
     username: postgres
     password: password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+
+aws:
+  s3:
+    bucket-name: your-s3-bucket-name
+    region: us-east-1  # Укажите ваш регион
+    access-key: YOUR_AWS_ACCESS_KEY  # Ваш AWS access key
+    secret-key: YOUR_AWS_SECRET_KEY  # Ваш AWS secret key
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+
+# Настройки Kafka (если нужно)
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: pastebin-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer

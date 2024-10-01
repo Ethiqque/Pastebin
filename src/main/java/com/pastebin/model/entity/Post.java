@@ -9,25 +9,36 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "post")
+public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String username;
+    @Column(name = "content_id", nullable = false)
+    private String contentId;  // S3 content key
 
-    private String email;
+    @Column(name = "author_id")
+    private Long authorId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts;
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Long> likesIds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

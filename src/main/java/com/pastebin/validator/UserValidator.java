@@ -1,7 +1,7 @@
 package com.pastebin.validator;
 
 import com.pastebin.model.dto.UserDto;
-import com.example.demo.repository.UserRepository;
+import com.pastebin.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

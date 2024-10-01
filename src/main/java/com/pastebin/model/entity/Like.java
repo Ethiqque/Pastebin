@@ -6,36 +6,32 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name="likes")
+public class Like {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String username;
+    @Column(name="user_id", nullable = false)
+    private Long userId;
 
-    private String email;
+    @Column(name = "comment_id")
+    private Long commentId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts;
+    @Column(name = "post_id")
+    private Long postId;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 }

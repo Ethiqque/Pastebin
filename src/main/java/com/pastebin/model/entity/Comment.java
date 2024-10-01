@@ -9,25 +9,33 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String username;
+    @Column(name = "content", nullable = false, length = 4096)
+    private String content;
 
-    private String email;
+    @Column(name = "author_id", nullable = false)
+    private long authorId;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts;
+    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    private List<Long> likesIds = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,4 +46,10 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @Column(name = "verified")
+    private Boolean verified;
+
+    @Column(name = "verified_date")
+    private LocalDateTime verifiedDate;
 }
