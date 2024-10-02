@@ -79,7 +79,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> findAllAuthorPosts(Long userId) {
-        return postRepository.findAllByAuthorId(userId).stream()
+        return postRepository.findAllByUserId(userId).stream()
                 .map(postMapper::toDto)
                 .toList();
     }

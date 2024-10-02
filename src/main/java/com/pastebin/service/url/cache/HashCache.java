@@ -17,10 +17,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public class HashCache {
 
-    @Value("${services.url.cache.size}")
+    @Value("${services.hash.cache.size}")
     private int cacheSize;
 
-    @Value("${services.url.fillingPercent}")
+    @Value("${services.hash.fillingPercent}")
     private int fillingPercent;
 
     private Queue<String> hashes;

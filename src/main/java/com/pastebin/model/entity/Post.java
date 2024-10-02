@@ -27,26 +27,26 @@ public class Post {
     @Column(name = "content_id", nullable = false)
     private String contentId;  // S3 content key
 
-    @Column(name = "author_id")
-    private Long authorId;
+    @ManyToOne
+    @JoinColumn(name = "author_id", nullable = false)
+    private User user;
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(name = "post_likes", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "user_id")
     private List<Long> likesIds = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    @OneToMany(mappedBy = "post", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "expires_at")
     private LocalDateTime expiresAt;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

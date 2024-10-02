@@ -30,7 +30,9 @@ public class Comment {
     @Column(name = "author_id", nullable = false)
     private long authorId;
 
-    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(name = "comment_likes", joinColumns = @JoinColumn(name = "comment_id"))
+    @Column(name = "user_id")
     private List<Long> likesIds = new ArrayList<>();
 
     @ManyToOne
@@ -38,17 +40,15 @@ public class Comment {
     private Post post;
 
     @CreationTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "verified")
-    private Boolean verified;
+    private Boolean verified = false; // Set a default value
 
     @Column(name = "verified_date")
     private LocalDateTime verifiedDate;

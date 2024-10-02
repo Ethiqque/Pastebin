@@ -9,38 +9,74 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
         format_sql: true
 
-  redis:
-    host: localhost
-    port: 6379
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
 
-aws:
-  s3:
-    bucket-name: your-s3-bucket-name
-    region: us-east-1  # Укажите ваш регион
-    access-key: YOUR_AWS_ACCESS_KEY  # Ваш AWS access key
-    secret-key: YOUR_AWS_SECRET_KEY  # Ваш AWS secret key
+  data:
+    redis:
+      port: 6379
+      host: localhost
+
+    kafka:
+      port: 9092
+      host: localhost
+      group-id: post_service
+
+    cache:
+      hashtag:
+        max_size: 1000
+
+cloud:
+  aws:
+    credentials:
+      access-key:
+      secret-key:
+    region:
+      static: us-east-1
+    stack:
+      auto: false
+
+application:
+  bucket:
+    name: 
 
 logging:
   level:
     root: INFO
     org.springframework.web: DEBUG
 
-# Настройки Kafka (если нужно)
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: pastebin-group
-      auto-offset-reset: earliest
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    consumer:
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+scheduler:
+  clear:
+    cron: "0 0 0 * * ?"  # Launching every day at midnight
+  generate:
+    cron: "0 0 0/8 * * ?" # Every 8 hours
+
+async:
+  task:
+    corePoolSize: 5
+    maxPoolSize: 10
+    queueCapacity: 100
+  post:
+    corePoolSize: 20
+    maxPoolSize: 50
+    queueCapacity: 100
+  core: 10
+  max: 20
+  queue_capacity: 50
+
+services:
+  hash:
+    batch: 100
+    fillingPercent: 20
+    cache:
+      size: 200
+  encoder:
+    base62:
+      symbols: 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz
+

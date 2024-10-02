@@ -11,6 +11,4 @@ public class PostCreateDto {
     @NotNull
     @NotBlank
     private String content;
-    private Long authorId;
-    private Long projectId;
 }

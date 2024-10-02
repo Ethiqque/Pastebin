@@ -18,7 +18,7 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class HashServiceImpl implements HashService {
 
-    @Value("${services.url.batch}")
+    @Value("${services.hash.batch}")
     private int batchSize;
     private final Base62Encoder encoder;
     private final HashRepository hashRepository;

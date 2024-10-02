@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostUpdateDto {
+
     @NotBlank(message = "content should not be blank")
     private String content;
 }
