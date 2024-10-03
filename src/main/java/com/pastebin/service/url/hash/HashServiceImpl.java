@@ -25,13 +25,15 @@ public class HashServiceImpl implements HashService {
 
     @Override
     @Async("generateHashesExecutor")
-    public CompletableFuture<Void> generateHashes() {
+    @Transactional
+    public void generateHashes() {
         List<Hash> hashes = encoder.encodeSymbolsToHash(hashRepository.findUniqueNumbers(batchSize)).stream()
                 .map(Hash::new)
                 .toList();
         hashRepository.saveAll(hashes);
+        List<Hash> h = hashRepository.getAll();
         log.info("Generated new hashes batch");
-        return CompletableFuture.completedFuture(null);
+        log.info("All hashes: {}", h);
     }
 
     @Override

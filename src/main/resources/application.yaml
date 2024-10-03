@@ -1,7 +1,10 @@
 server:
   port: 8080
 
+
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     url: jdbc:postgresql://localhost:5433/pastebin_db
     username: postgres
@@ -44,7 +47,7 @@ cloud:
 
 application:
   bucket:
-    name: 
+    name:
 
 logging:
   level:

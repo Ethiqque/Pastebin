@@ -7,7 +7,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.redis.core.RedisHash;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +19,19 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
+@RedisHash("post")
 @Table(name = "post")
-public class Post {
+public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(name = "url", nullable = false)
+    private String url;
+
     @Column(name = "content_id", nullable = false)
-    private String contentId;  // S3 content key
+    private String contentId;
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)

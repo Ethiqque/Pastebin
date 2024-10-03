@@ -1,5 +1,6 @@
-package com.pastebin.model.entity;
+package com.pastebin.model.dto.post;
 
+import com.pastebin.model.entity.Comment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,8 @@ import java.util.List;
 public class PostResponse {
 
     private Long postId;
+
+    private String url;
 
     private Long authorId;
 

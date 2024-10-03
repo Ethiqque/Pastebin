@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 public interface HashService {
 
-    CompletableFuture<Void> generateHashes();
+    void generateHashes();
 
     List<String> getHashes(int amount);
 

@@ -1,14 +1,14 @@
 package com.pastebin.validator;
 
 import com.pastebin.model.dto.UserDto;
-import com.pastebin.repository.UserRepository;
+import com.pastebin.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class UserValidator {
-    private final UserRepository userRepository;
+public class PostValidator {
+    private final PostRepository postRepository;
 
     public void validateCreate(UserDto userDto) {
         validateSomething(userDto);

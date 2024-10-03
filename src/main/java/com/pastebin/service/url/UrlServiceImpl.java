@@ -1,4 +1,4 @@
-package com.pastebin.service.url.url;
+package com.pastebin.service.url;
 
 import com.pastebin.exception.NotFoundException;
 import com.pastebin.model.dto.url.Request;
@@ -24,12 +24,21 @@ public class UrlServiceImpl implements UrlService {
     private final UrlRepository urlRepository;
     private final HashCache hashCache;
 
+    @Override
     @Transactional(readOnly = true)
     public RedirectView getRedirectView(String hash) {
         return new RedirectView(
                 urlCacheRepository.getUrlByHash(hash)
                 .orElseGet(() -> urlRepository.getUrlByHash(hash).map(Url::getUrl)
                 .orElseThrow(() -> new NotFoundException("URL not found for url: " + hash))));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public String getUrl(String hash) {
+        return urlCacheRepository.getUrlByHash(hash)
+                .orElseGet(() -> urlRepository.getUrlByHash(hash).map(Url::getUrl)
+                .orElseThrow(() -> new NotFoundException("URL not found for url: " + hash)));
     }
 
     @Override

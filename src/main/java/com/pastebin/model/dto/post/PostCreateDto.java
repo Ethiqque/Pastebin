@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class PostCreateDto {
+
     @NotNull
     @NotBlank
     private String content;

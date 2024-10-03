@@ -15,4 +15,7 @@ public interface HashRepository extends JpaRepository<Hash, String> {
 
     @Query(value = "DELETE FROM hash WHERE hash IN (SELECT hash FROM hash ORDER BY random() LIMIT :count) RETURNING hash", nativeQuery = true)
     List<String> getHashBatch(int count);
+
+    @Query("SELECT h FROM Hash h")
+    List<Hash> getAll();
 }

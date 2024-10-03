@@ -57,7 +57,7 @@ public class HashCache {
 
     private void fillCacheSynchronously() {
         try {
-            hashService.generateHashes().join();
+            hashService.generateHashes();
             hashes.addAll(hashService.getHashes(cacheSize));
         } catch (Exception e) {
             throw new RuntimeException("Failed to fill cache synchronously", e);
